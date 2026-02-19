@@ -20,7 +20,6 @@ PURPOSE:
 PARAMETERS: n=10, m=10, T=100, o=(10,...,10), σ²=36, B=5000 MC samples.
 
 OUTPUT: fig_ell_shapes.pdf (single-panel vector PDF)
-NOT YET in main.tex — generated for review.
 """
 
 import math

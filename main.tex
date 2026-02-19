@@ -51,12 +51,13 @@ Lucor (\url{https://lucor.ai})\\
 
 \begin{abstract}
 When two observations share a value, how likely is it that they came from the same latent source?
-We give a closed-form estimator for this \emph{collision-conditioned same-source probability} that requires only the observed value frequencies and a single scalar summary of source heterogeneity---the across-source degree variance---with no knowledge of the full source--value emission structure.
+This question underlies entity resolution, record linkage, and any setting where latent entities emit observable values with heterogeneous intensities.
+Practitioners have long known that rare values are more informative than common ones and have built empirical adjustments accordingly, yet a closed-form account of \emph{which summary of entity heterogeneity controls the answer} has been missing.
 
-The setting is a bipartite multigraph whose hidden bottom vertices are latent entities and whose top vertices are observable value labels; a measurement samples an edge uniformly and returns the value endpoint.
-Under a maximum-entropy (configuration-model) ensemble over graphs consistent with the observed value marginals, we prove that the ensemble mean of the exact same-source posterior depends on the unknown entity side only through the entity-degree second moment, equivalently the degree variance.
-We also derive an analytic expression for the ensemble variance (uncertainty) of the posterior, which depends on one additional degree-shape statistic.
-We validate both formulas by exact enumeration in small cases and by end-to-end simulations that sample ground-truth graphs, estimate value marginals from finite data, and compare the true posterior to the estimator's mean and uncertainty bands.
+We model the emission process as a bipartite multigraph connecting entities to value labels and derive a closed-form estimator for the collision-conditioned same-source probability $P(\text{same source}\mid\text{value collision})$.
+The surprise is one of simplicity: under a maximum-entropy (configuration-model) ensemble consistent with observed value marginals, the ensemble mean of the exact posterior depends on the unknown entity side only through a single scalar---the across-entity degree variance~$\sigma^2$.
+No knowledge of the full entity--value emission structure is needed; $\sigma^2$ acts as a sufficient statistic for the entity-degree sequence.
+We also derive an analytic expression for the ensemble variance (uncertainty) of the posterior, which depends on one additional degree-shape statistic, and validate both formulas by exact enumeration in small cases and by end-to-end simulations.
 \end{abstract}
 
 \medskip
@@ -67,9 +68,9 @@ We validate both formulas by exact enumeration in small cases and by end-to-end 
 % ============================================================
 \section{Introduction}
 Many systems observe \emph{values} but not the \emph{entities} that produced them.
-Examples include repeated measurements of latent sources, anonymized logs, records produced by hidden actors, or sensors that emit coarse labels.
+Examples include repeated measurements of latent sources, anonymized logs, emissions from hidden actors, or sensors that return coarse labels.
 Even when a value repeats (a ``collision''), it may reflect either repeated emission from the same latent entity or emissions from different entities that share common values.
-Quantifying this ambiguity is useful for debugging pipelines, designing downstream inference, and understanding privacy and identifiability properties.
+The question is fundamental to entity resolution and record linkage, where practitioners have long known that rare values carry more evidential weight than common ones---modern linkage systems incorporate empirical term-frequency adjustments \cite{winkler1989b}---but a closed-form answer to \emph{which summary of entity heterogeneity controls the same-source probability} has been missing.
 
 This paper considers a stylized but broadly applicable model: latent entities emit value labels with different intensities.
 The (unobserved) emission spectrum is encoded as a bipartite multigraph with integer edge multiplicities.
@@ -120,8 +121,8 @@ Collective ER models exploit relational structure and dependencies across decisi
 \cite{bhattacharya2007}.
 Recent Bayesian approaches place priors directly on the latent partition or bipartite matching
 \cite{steorts2016,sadinle2017}.
-In contrast, our goal is a single scalar summary---the collision-conditioned same-source probability---and we
-derive it analytically under a principled random-graph null (configuration model) consistent with observed value marginals.
+These models work with bipartite graphs linking observations to latent entities---structurally the same object as our emission graph---but use them as scaffolding for MCMC inference on the linkage structure rather than deriving closed-form moments of the collision process.
+Our goal is complementary: a single scalar summary---the collision-conditioned same-source probability---derived analytically under a principled random-graph null (configuration model) consistent with observed value marginals.
 This scalar can be interpreted as the \emph{precision} of an equality-based blocking key:
 among colliding values, what fraction of collisions are truly same-source?
 
@@ -945,6 +946,11 @@ Formalising this inverse problem---including identifiability conditions and fini
 The configuration model is a maximum-entropy baseline, but real emission graphs may exhibit structure such as entity--value affinity (block structure) or degree--degree correlations (assortativity).
 Quantifying how much such departures can shift $\theta(C)$ away from the configuration-model mean---e.g., via worst-case bounds over graphs with given marginals and bounded block structure---would provide robustness guarantees for practitioners.
 
+\paragraph{Nature of the contribution.}
+The entity-resolution and random-graph communities each possess the ingredients for the result in this paper: the bipartite entity-to-value structure is standard in Bayesian ER, and the configuration-model moment calculations are standard in random graph theory.
+That $P(S\mid\coll)$ reduces to the degree variance $\sigma^2$ is therefore not a deep technical achievement---it is a short bridge between two fields that have not previously been connected in this way.
+We view the simplicity as the point: a single, interpretable scalar replaces either the full (unobserved) emission graph or the empirical frequency adjustments that practitioners currently calibrate from labeled data.
+
 \subsection{Concluding remarks}
 
 We introduced a method for estimating the collision-conditioned same-source probability $P(S\mid \coll)$ in a latent-entity emission model when the full emission graph is unknown.
@@ -1121,6 +1127,12 @@ I.~P. Fellegi and A.~B. Sunter.
 M.~A. Jaro.
 \newblock Advances in record-linkage methodology as applied to matching the 1985 Census of {T}ampa, {F}lorida.
 \newblock \emph{Journal of the American Statistical Association}, 84(406):414--420, 1989.
+
+\bibitem{winkler1989b}
+W.~E. Winkler.
+\newblock Frequency-based matching in the {F}ellegi--{S}unter model of record linkage.
+\newblock In \emph{Proceedings of the Section on Survey Research Methods},
+  pages 778--783. American Statistical Association, 1989.
 
 \bibitem{winkler2006}
 W.~E. Winkler.

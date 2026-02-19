@@ -2,7 +2,7 @@
 End-to-end demonstration: ground-truth graphs → simulated measurements →
 estimated marginals → Theorem 1 estimator → comparison with truth.
 
-Addresses the paper's TODO:
+Demonstrates the full pipeline:
   (i)   Sample ground-truth graphs from the configuration model.
   (ii)  Simulate measurements (draw edges, observe value endpoints).
   (iii) Estimate value marginals from finite data.
