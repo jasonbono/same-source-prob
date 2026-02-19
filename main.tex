@@ -57,6 +57,9 @@ We also derive an analytic expression for the ensemble variance (uncertainty) of
 We validate the formulas by exact enumeration in small toy examples and by an end-to-end demonstration that samples ground-truth graphs, simulates measurements, estimates value marginals from finite data, and compares the true posterior to the mean estimate and uncertainty bands. 
 \end{abstract}
 
+\medskip
+\noindent\textbf{Keywords:} same-source probability, value collision, bipartite configuration model, maximum-entropy ensemble, record linkage, entity resolution
+
 \vspace{0.2em}
 
 % ============================================================
@@ -78,7 +81,7 @@ We then:
 \begin{itemize}[leftmargin=*]
 \item introduce a maximum-entropy bipartite graph ensemble (configuration model) consistent with the observed value marginals,
 \item prove that the ensemble mean of the exact posterior given a collision is determined solely by the entity-degree second moment (variance),
-\item derive an analytic expression for the ensemble variance (uncertainty) across graphs, and
+\item derive an analytic expression for the ensemble variance (uncertainty) across graphs,
 \item validate by exact enumeration in small toy examples, and
 \item demonstrate end-to-end performance: sampling ground-truth graphs, simulating measurements, estimating value marginals from finite data, and comparing the true posterior to the estimator's mean and uncertainty bands.
 \end{itemize}
@@ -99,7 +102,8 @@ P(\text{match}\mid \text{agree})=\frac{m\,\pi}{m\,\pi + u\,(1-\pi)},
 \]
 maps directly to our target $\theta(C)=P(S\mid \coll)$, with prior $\pi=P(S)$.
 A key difference is that classical linkage frameworks typically treat $(m,u,\pi)$ as free parameters and
-estimate them from labeled data or via EM \cite{jaro1989,winkler2006}.
+estimate them from labeled data or via EM \cite{jaro1989,winkler2006};
+later statistical models refine the probabilistic foundations \cite{copas1990}.
 Here we instead start from a generative emission graph model, and derive $\theta(C)$ exactly when $C$ is known
 (Proposition~\ref{prop:known}), and in closed form \emph{in expectation} when $C$ is unknown under a
 maximum-entropy (configuration-model) ensemble (Theorem~\ref{thm:mean}).
@@ -112,6 +116,8 @@ including blocking/indexing, similarity computation, and clustering/classificati
 \cite{elmagarmid2007,hernandez1995,christen2012book,christen2012survey,getoor2012}.
 Collective ER models exploit relational structure and dependencies across decisions
 \cite{bhattacharya2007}.
+Recent Bayesian approaches place priors directly on the latent partition or bipartite matching
+\cite{steorts2016,sadinle2017}.
 In contrast, our goal is a single scalar summary---the collision-conditioned same-source probability---and we
 derive it analytically under a principled random-graph null (configuration model) consistent with observed value marginals.
 This scalar can be interpreted as the \emph{precision} of an equality-based blocking key:
