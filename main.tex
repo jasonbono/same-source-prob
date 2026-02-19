@@ -514,8 +514,6 @@ Algorithm~\ref{alg:mc} describes a practical uncertainty procedure.
 It requires choosing a degree-shape model for $\ell$ consistent with $(T,n,\sigma^2)$.
 For the toy experiments we simply fix $\ell$ exactly; for larger demos we recommend either (i) a simple two-level construction or (ii) a parametric prior (e.g., a Dirichlet--multinomial / compound-multinomial model \cite{mosimann1962,minka2000}) that can be tuned to match $\sigma^2$.
 
-\textbf{TODO (dev):} implement a robust ``moment-matching'' sampler for $\ell$ given $(T,n,\sigma^2)$ with integer constraints and $\ell_i\ge 1$.
-
 \begin{algorithm}[htbp]
 \caption{Monte Carlo distribution of $\theta(C)$ for uncertainty bands}
 \label{alg:mc}
@@ -713,16 +711,14 @@ Let $T=qn+r$ with $0\le r<n$.
 Then:
 \[
 \sigma^2_{\min} = \frac{r(n-r)}{n^2}
-\quad\text{(degrees as equal as possible)},
+\quad\text{(degrees as equal as possible, by a standard exchange argument)},
 \]
 \[
 \sigma^2_{\max} = \frac{(n-1)(T-n)^2}{n^2}
-\quad\text{(one dominant emitter)}.
+\quad\text{(one dominant emitter, all others at 1)}.
 \]
-\textbf{TODO (paper polish):} add a short proof or cite a discrete variance bound.
 
 \paragraph{How to set $\sigma^2$ in practice.}
-% TODO: check this rewritten section with ChatGPT Pro—new framing.
 The primary recommendation is to set $\sigma^2$ from domain knowledge about the emission process, then verify robustness with a sensitivity sweep.
 
 \smallskip\noindent\textbf{Domain elicitation (recommended).}
