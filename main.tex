@@ -39,6 +39,9 @@ with Unknown Latent Emission Graphs
 \vspace{-0.3em}}
 \author{%
 \textbf{Jason Bono}\\
+Lucor (\url{https://lucor.ai})\\
+\href{mailto:jasonbono@lucor.ai}{\texttt{jasonbono@lucor.ai}}\\[2pt]
+{\small ORCID: \href{https://orcid.org/0000-0002-3018-714X}{0000-0002-3018-714X}}
 \vspace{-0.7em}
 }
 \date{\vspace{-0.8em}February 2026\vspace{-0.6em}}
@@ -47,14 +50,13 @@ with Unknown Latent Emission Graphs
 \maketitle
 
 \begin{abstract}
-We study a measurement model in which unobserved latent entities emit observable value labels according to an unknown emission spectrum.
-The spectrum is represented as a bipartite multigraph whose bottom vertices are latent entities and whose top vertices are value labels; a measurement draw samples an edge uniformly at random and returns the value endpoint.
-Given two measurement draws, we ask for the posterior probability that the two observed values came from the same latent entity, especially when the observed values collide (match).
-When the full emission graph is known, this posterior admits a simple closed form in terms of the incidence matrix.
-The main contribution of this paper is an estimator for the collision-conditioned same-source probability when the full graph is unknown, the observer knows only the value-label marginals (value-side degrees), and the observer has domain knowledge about the \emph{variance} of entity degrees (heterogeneity of emission volume across entities).
-Under a maximum-entropy (configuration-model) ensemble over bipartite multigraphs consistent with the observed value marginals, we prove that the ensemble mean of the exact posterior depends on the unknown entity side only through the entity-degree second moment, equivalently the across-entity degree variance.
-We also derive an analytic expression for the ensemble variance (uncertainty) of the posterior across graphs, which depends on one additional degree-shape statistic (a third falling-factorial moment).
-We validate the formulas by exact enumeration in small toy examples and by an end-to-end demonstration that samples ground-truth graphs, simulates measurements, estimates value marginals from finite data, and compares the true posterior to the mean estimate and uncertainty bands. 
+When two observations share a value, how likely is it that they came from the same latent source?
+We give a closed-form estimator for this \emph{collision-conditioned same-source probability} that requires only the observed value frequencies and a single scalar summary of source heterogeneity---the across-source degree variance---with no knowledge of the full source--value emission structure.
+
+The setting is a bipartite multigraph whose hidden bottom vertices are latent entities and whose top vertices are observable value labels; a measurement samples an edge uniformly and returns the value endpoint.
+Under a maximum-entropy (configuration-model) ensemble over graphs consistent with the observed value marginals, we prove that the ensemble mean of the exact same-source posterior depends on the unknown entity side only through the entity-degree second moment, equivalently the degree variance.
+We also derive an analytic expression for the ensemble variance (uncertainty) of the posterior, which depends on one additional degree-shape statistic.
+We validate both formulas by exact enumeration in small cases and by end-to-end simulations that sample ground-truth graphs, estimate value marginals from finite data, and compare the true posterior to the estimator's mean and uncertainty bands.
 \end{abstract}
 
 \medskip
@@ -322,7 +324,7 @@ Define the normalized concentration statistic (Simpson concentration of the enti
 }
 \]
 
-\paragraph{Sanity check: $\alpha$ is the unconditional same-source probability.}
+\paragraph{Sanity check: \texorpdfstring{$\alpha$}{alpha} is the unconditional same-source probability.}
 Before conditioning on collisions, $\alpha$ already has a direct probabilistic meaning.
 \begin{proposition}[Sanity check: unconditional same-source probability]
 \label{prop:sanity}
@@ -496,7 +498,7 @@ A proof is given in Appendix~\ref{app:varproof}.
 % ============================================================
 \section{Implementation recipes}
 
-\subsection{Point estimator from $(o,n,\sigma^2)$}
+\subsection{Point estimator from \texorpdfstring{$(o,n,\sigma^2)$}{(o, n, sigma-squared)}}
 Algorithm~\ref{alg:mean} computes the variance-only point estimate (ensemble mean).
 
 \begin{algorithm}[htbp]
@@ -599,7 +601,7 @@ For general background on sampling/enumerating contingency tables with fixed mar
 \cite{diaconisgangolli1995,diaconis1998algebraic,dyer1997,chen2005smc,patefield1981}.
 
 
-\subsection{Toy set A: $n=3$, $m=3$, $o=(4,4,4)$}
+\subsection{Toy set A: \texorpdfstring{$n=3$, $m=3$, $o=(4,4,4)$}{n=3, m=3, o=(4,4,4)}}
 Here $T=12$ and $D=\sum_a o_a^2 = 48$.
 
 Table~\ref{tab:toy-summary} summarizes the means and standard deviations.
@@ -669,7 +671,7 @@ $0.7917$ & $0.27273$ & remainder\\
 \end{tabular}
 \end{table}
 
-\subsection{Toy set B: skewed value marginals $o=(8,2,2)$ with $\ell=(4,4,4)$}
+\subsection{Toy set B: skewed value marginals \texorpdfstring{$o=(8,2,2)$}{o=(8,2,2)} with \texorpdfstring{$\ell=(4,4,4)$}{l=(4,4,4)}}
 Here $T=12$ and $D=72$.
 Table~\ref{tab:toy-B} lists the exact distribution.
 
@@ -724,7 +726,7 @@ Then:
 \quad\text{(one dominant emitter, all others at 1)}.
 \]
 
-\paragraph{How to set $\sigma^2$ in practice.}
+\paragraph{How to set \texorpdfstring{$\sigma^2$}{sigma-squared} in practice.}
 The primary recommendation is to set $\sigma^2$ from domain knowledge about the emission process, then verify robustness with a sensitivity sweep.
 
 \smallskip\noindent\textbf{Domain elicitation (recommended).}
@@ -933,7 +935,7 @@ When fields are correlated (e.g., name and ethnicity), a joint bipartite multigr
 Characterising the ensemble mean of the joint posterior---and whether a tractable ``variance-only'' parameterisation survives---is an open question.
 A related challenge is aggregating value-conditioned posteriors across multiple observed collisions to form a stronger overall same-source estimate, e.g., by treating per-collision posteriors as evidence factors in a probabilistic linkage objective.
 
-\paragraph{Inverting collisions to estimate $\sigma^2$.}
+\paragraph{Inverting collisions to estimate \texorpdfstring{$\sigma^2$}{sigma-squared}.}
 This paper treats the entity-degree variance $\sigma^2$ as a domain-knowledge input.
 A complementary direction is to \emph{estimate} $\sigma^2$ from observed data: if many pairs of draws are available, the empirical collision rate constrains $\alpha$ (and hence $\sigma^2$) via the relationship $P(\coll)=\sum_a (o_a/T)^2 \cdot \E[\theta(C)]$.
 More generally, higher-order collision statistics (e.g., triple collisions) may identify additional degree-shape parameters such as $M_3$.
