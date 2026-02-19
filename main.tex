@@ -41,7 +41,7 @@ with Unknown Latent Emission Graphs
 \textbf{Jason Bono}\\
 \vspace{-0.7em}
 }
-\date{\vspace{-0.8em}\today\vspace{-0.6em}}
+\date{\vspace{-0.8em}February 2026\vspace{-0.6em}}
 
 \begin{document}
 \maketitle
@@ -219,7 +219,7 @@ A measurement draw samples one edge uniformly at random and returns the value en
 \end{figure}
 
 \subsection{Exact posteriors for a known incidence matrix}
-The following identities are direct algebra from the model (included for completeness and to anchor the unknown-graph setting).
+The following identities are elementary but form the foundation for the unknown-graph analysis.
 
 \begin{proposition}[Known-graph posteriors]
 \label{prop:known}
@@ -243,6 +243,32 @@ P(S\mid \coll)
 }
 \]
 \end{proposition}
+
+\begin{proof}
+For a single draw, $P(E=e_i, V=v_a)=c_{ia}/T$, hence $P(V=v_a)=o_a/T$ and
+\[
+P(E=e_i \mid V=v_a)=\frac{P(E=e_i,V=v_a)}{P(V=v_a)}=\frac{c_{ia}/T}{o_a/T}=\frac{c_{ia}}{o_a}.
+\]
+Because the two draws are independent (with replacement),
+\[
+P(S \mid V_1=v_a,V_2=v_b)
+= \sum_{i=1}^n P(E_1=e_i\mid V_1=v_a)\,P(E_2=e_i\mid V_2=v_b)
+= \sum_{i=1}^n \frac{c_{ia}}{o_a}\frac{c_{ib}}{o_b},
+\]
+which gives the first identity. The collision-at-$v_a$ case is $a=b$.
+
+For the collision-only posterior, write $P(S\mid \coll)=P(S\cap \coll)/P(\coll)$.
+Under with-replacement edge sampling,
+\[
+P(S\cap \coll)=\sum_{i=1}^n\sum_{a=1}^m P(E_1=e_i,V_1=v_a)\,P(E_2=e_i,V_2=v_a)
+= \sum_{i,a}\left(\frac{c_{ia}}{T}\right)^2=\frac{\sum_{i,a}c_{ia}^2}{T^2}.
+\]
+Similarly,
+\[
+P(\coll)=\sum_{a=1}^m P(V_1=v_a)P(V_2=v_a)=\sum_a\left(\frac{o_a}{T}\right)^2=\frac{\sum_a o_a^2}{T^2}.
+\]
+Taking the ratio yields $P(S\mid \coll)=\bigl(\sum_{i,a}c_{ia}^2\bigr)\big/\bigl(\sum_a o_a^2\bigr)$.
+\end{proof}
 
 We will write
 \[
@@ -381,9 +407,10 @@ p_2=\frac{D-T}{T(T-1)}.
 If the observer specifies the degree variance $\sigma^2$ (hence $\alpha = \frac{1}{n}+\frac{n\sigma^2}{T^2}$), this yields a closed-form point estimator using only $(o,n,\sigma^2)$.
 \end{theorem}
 
-\paragraph{Interpretation (strong claim).}
+\paragraph{Interpretation (model-based estimator).}
 For fixed value marginals $o$ and fixed entity-degree second moment (equivalently fixed $\sigma^2$), the configuration-model ensemble mean of the \emph{exact} posterior $\theta(C)=P(S\mid \coll)$ is uniquely determined.
-Thus the variance-based estimator is \emph{not a heuristic}: it is exactly the ensemble mean under the uniform-stub-matching (maximum-entropy-over-matchings) graph model.
+The variance-based estimator is therefore not an ad hoc approximation but exactly the ensemble mean under the uniform-stub-matching (maximum-entropy-over-matchings) graph model.
+When real emission graphs deviate from the configuration model (e.g., entity--value affinities or block structure), the estimator should be viewed as a principled degree-constrained baseline.
 
 \paragraph{Computation.}
 Computing the estimator requires only $T=\sum_a o_a$, $D=\sum_a o_a^2$, and $\alpha$.
@@ -485,7 +512,7 @@ Algorithm~\ref{alg:mean} computes the variance-only point estimate (ensemble mea
 \subsection{Uncertainty bands by Monte Carlo}
 Algorithm~\ref{alg:mc} describes a practical uncertainty procedure.
 It requires choosing a degree-shape model for $\ell$ consistent with $(T,n,\sigma^2)$.
-For the toy experiments we simply fix $\ell$ exactly; for larger demos we recommend either (i) a simple two-level construction or (ii) a parametric prior (e.g., baseline-1 Dirichlet--multinomial \cite{mosimann1962,minka2000}) that can be tuned to match $\sigma^2$.
+For the toy experiments we simply fix $\ell$ exactly; for larger demos we recommend either (i) a simple two-level construction or (ii) a parametric prior (e.g., a Dirichlet--multinomial / compound-multinomial model \cite{mosimann1962,minka2000}) that can be tuned to match $\sigma^2$.
 
 \textbf{TODO (dev):} implement a robust ``moment-matching'' sampler for $\ell$ given $(T,n,\sigma^2)$ with integer constraints and $\ell_i\ge 1$.
 
