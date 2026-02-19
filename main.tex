@@ -55,7 +55,7 @@ This question underlies entity resolution, record linkage, and any setting where
 Practitioners have long known that rare values are more informative than common ones and have built empirical adjustments accordingly, yet a closed-form account of \emph{which summary of entity heterogeneity controls the answer} has been missing.
 
 We model the emission process as a bipartite multigraph connecting entities to value labels and derive a closed-form estimator for the collision-conditioned same-source probability $P(\text{same source}\mid\text{value collision})$.
-The answer is remarkably simple: under a maximum-entropy (configuration-model) ensemble consistent with observed value marginals, the ensemble mean of the exact posterior depends on the unknown entity side only through a single scalar---the across-entity degree variance~$\sigma^2$.
+The surprise is one of simplicity: under a maximum-entropy (configuration-model) ensemble consistent with observed value marginals, the ensemble mean of the exact posterior depends on the unknown entity side only through a single scalar---the across-entity degree variance~$\sigma^2$.
 No knowledge of the full entity--value emission structure is needed; $\sigma^2$ acts as a sufficient statistic for the entity-degree sequence.
 We also derive an analytic expression for the ensemble variance (uncertainty) of the posterior, which depends on one additional degree-shape statistic, and validate both formulas by exact enumeration in small cases and by end-to-end simulations.
 \end{abstract}
