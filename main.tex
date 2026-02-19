@@ -909,7 +909,6 @@ In practice, Monte Carlo bands under a chosen degree model are the most straight
 The uniform-stub-matching (configuration-model) assumption is a principled default given degree information, but real systems may exhibit structure beyond degrees (e.g., specialization where certain entities preferentially emit certain values).
 Such structure can shift $\theta(C)$ away from the configuration-model mean.
 The toy distributions in Section~\ref{sec:toy} illustrate the spread even under the configuration model; structured deviations can be larger.
-An important next step is to study robustness to structured alternatives.
 
 \paragraph{Finite-sample estimation of value marginals.}
 The theoretical results assume that the value marginals $o$ (or $P(V{=}v_a)$) are known exactly.
@@ -927,39 +926,18 @@ P(S \mid V_1=V_2=v_a),
 i.e., the same-source posterior conditioned on a collision at a specific value label.
 Such a result would provide a per-value ``collision informativeness'' statistic that complements the global collision event $\coll$.
 
-\paragraph{Aggregating many weak matching signals.}
-In realistic datasets, we may observe many collisions across many value labels, each providing a weak same-source signal.
-A promising direction is to integrate value-conditioned posteriors across multiple observed matches to form a stronger overall estimate of same-source probabilities (e.g., by treating per-collision posteriors as evidence factors in a probabilistic record-linkage or clustering objective, or by fitting a simple latent-variable model whose sufficient statistics include the observed collision counts).
-Working out a principled aggregation scheme (and its calibration/uncertainty) is left to future work.
-
-\paragraph{Multiple independent emission fields.}
+\paragraph{Multi-field extensions.}
 Record-linkage applications typically compare records on several fields simultaneously (e.g., name, date of birth, postal code), each governed by its own emission spectrum.
 If fields are conditionally independent given the latent entity, the joint same-source posterior factorises into per-field contributions, and the present framework can be applied field by field.
 When fields are correlated (e.g., name and ethnicity), a joint bipartite multigraph over field tuples is needed, and the configuration-model ensemble must respect cross-field dependence structure.
 Characterising the ensemble mean of the joint posterior---and whether a tractable ``variance-only'' parameterisation survives---is an open question.
+A related challenge is aggregating value-conditioned posteriors across multiple observed collisions to form a stronger overall same-source estimate, e.g., by treating per-collision posteriors as evidence factors in a probabilistic linkage objective.
 
 \paragraph{Inverting collisions to estimate $\sigma^2$.}
 This paper treats the entity-degree variance $\sigma^2$ as a domain-knowledge input.
 A complementary direction is to \emph{estimate} $\sigma^2$ from observed data: if many pairs of draws are available, the empirical collision rate constrains $\alpha$ (and hence $\sigma^2$) via the relationship $P(\coll)=\sum_a (o_a/T)^2 \cdot \E[\theta(C)]$.
 More generally, higher-order collision statistics (e.g., triple collisions) may identify additional degree-shape parameters such as $M_3$.
 Formalising this inverse problem---including identifiability conditions and finite-sample rates---would make the framework fully data-driven.
-
-\paragraph{Extending to $k$-wise collisions.}
-The present analysis considers pairs of draws.
-When $k>2$ draws all produce the same value label, the event carries stronger evidence of a shared latent source.
-Extending Theorem~\ref{thm:mean} to a $k$-wise collision posterior $P(E_1=\cdots=E_k\mid V_1=\cdots=V_k)$ would require higher-order stub-matching moments ($p_k$, falling-factorial entity moments $M_k$) but may follow the same proof strategy.
-Such results could be useful in settings with high observation multiplicity, such as sensor networks or web-traffic analysis.
-
-\paragraph{Sampling without replacement and finite-population corrections.}
-The measurement model assumes draws with replacement.
-In some applications the draw process is closer to sampling without replacement (e.g., each edge can be ``used'' at most once).
-The without-replacement analogue replaces $P(S)=\alpha$ with a hypergeometric-flavoured calculation, and the configuration-model expectations acquire finite-population correction factors.
-Deriving the without-replacement counterparts of Theorems~\ref{thm:mean}--\ref{thm:var} is a natural extension.
-
-\paragraph{Bayesian treatment of $\sigma^2$ and model averaging.}
-Rather than conditioning on a point value of $\sigma^2$, one could place a prior over the feasible $\sigma^2$ interval (or equivalently over $\alpha$) and integrate the point estimator against this prior.
-Because $\widehat\theta$ is monotone and smooth in $\sigma^2$ (Figure~\ref{fig:sigma-sweep}), the resulting posterior predictive distribution of $\theta$ would inherit tractability.
-This Bayesian extension would naturally produce credible intervals that incorporate uncertainty about entity heterogeneity itself, complementing the graph-ensemble uncertainty captured by Theorem~\ref{thm:var}.
 
 \paragraph{Robustness beyond the configuration model.}
 The configuration model is a maximum-entropy baseline, but real emission graphs may exhibit structure such as entity--value affinity (block structure) or degree--degree correlations (assortativity).
