@@ -28,7 +28,6 @@ METHOD:
   from integer rounding.
 
 OUTPUT: fig_sigma_sweep.pdf (2-panel vector PDF)
-NOT YET in main.tex — generated for review.
 """
 
 import math
